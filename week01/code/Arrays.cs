@@ -8,12 +8,21 @@ public static class Arrays
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
     public static double[] MultiplesOf(double number, int length)
     {
-        // TODO Problem 1 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        // Create an empty fixed array
+        var multiples = new double[length];
 
-        return []; // replace this return statement with your own
+        // Create a multiplier variable equal to 1
+        int multiplier = 1;
+
+        /// Create a for loop that multiplies the number by the multiplier, which adds one after each loop, and 
+        /// appends the result into the previous array until i is greater than length.
+        for (int i = 0; i < length; i++) {
+            multiples[i] = number * multiplier;
+            multiplier++;
+        }
+
+        // Return the now-filled array
+        return multiples;
     }
 
     /// <summary>
@@ -25,9 +34,13 @@ public static class Arrays
     /// </summary>
     public static void RotateListRight(List<int> data, int amount)
     {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        // Use the GetRange method to duplicate the beginning of the data array
+        List<int>duplicate = data.GetRange(0, data.Count - amount);
+
+        // Use the RemoveRange method to remove the same data we just duplicated
+        data.RemoveRange(0, data.Count - amount);
+
+        // Use the AddRange method to add the duplicated data to the end of the data array
+        data.AddRange(duplicate);
     }
 }
