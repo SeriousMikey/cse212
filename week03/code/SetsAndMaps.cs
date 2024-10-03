@@ -1,4 +1,7 @@
+using System.Diagnostics;
+using System.Net.WebSockets;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 public static class SetsAndMaps
 {
@@ -21,8 +24,38 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        List<string> pairs = [];
+        var pairsSet = new HashSet<string>();
+
+        for (int i = 0; i < words.Length; i++)
+        {
+            var letter1 = words[i][0];
+            var letter2 = words[i][1];
+
+            var defaultWordSet = new HashSet<char>() {letter1, letter2};
+
+            if (letter1 != letter2)
+            {
+                foreach (var word in words)
+                {
+                    var wordSet = new HashSet<char>() {letter1, letter2};
+                    if (word[0] != word[1] && word != words[i])
+                    {
+                        wordSet.Add(word[0]);
+                        wordSet.Add(word[1]);
+                        
+                        if (wordSet.Count() == 2 && !pairsSet.Contains(word))
+                        {
+                            pairs.Add($"{word} & {words[i]}");
+                            pairsSet.Add(words[i]);
+                            pairsSet.Add(word);
+                        }
+                    }
+                    wordSet = defaultWordSet;
+                }
+            }
+        }
+        return pairs.ToArray();
     }
 
     /// <summary>
@@ -42,7 +75,16 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            var degree = fields[3];
+
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree] += 1;
+            }
+            else
+            {
+                degrees[degree] = 1;
+            }
         }
 
         return degrees;
@@ -66,8 +108,25 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        word1 = word1.ToLower().Replace(" ", "");
+        word2 = word2.ToLower().Replace(" ", "");
+
+        if (word1.Length != word2.Length)
+        {
+            return false;
+        }
+
+        var word1Array = word1.ToCharArray().OrderDescending();
+        var word2Array = word2.ToCharArray().OrderDescending();
+
+        if (word1Array.SequenceEqual(word2Array))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /// <summary>
